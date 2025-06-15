@@ -1,37 +1,45 @@
 "use client";
+import type { PromptResponse } from "../utils/definitions";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
-import type { TInputProps } from "@/lib/utils/definitions";
-import { promptLLM } from "@/lib/utils/actions/prompt";
-import { useActionState } from "react";
+import { useState } from "react";
 
-const initialState = {
-  message: null as string | null,
-};
+async function promptLLM(prompt: string): Promise<PromptResponse> {
+  const res = await fetch("/api/recipes", {
+    method: "POST",
+    body: JSON.stringify({ prompt }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!res.ok) throw new Error("Failed to fetch");
+  return res.json();
+}
 
-function Input({ handleKeyDown }: TInputProps) {
-  const [state, action, isLoading] = useActionState(promptLLM, initialState);
+function Input() {
+
+
+
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    e.currentTarget.reset();
+  };
 
   return (
     <>
-      <form action={action} className="w-fit relative">
+      <form className="w-fit relative" onSubmit={handleSubmit}>
         <input
           type="text"
           name="prompt"
           placeholder="What do you feel like eating?"
-          onKeyDown={handleKeyDown}
         />
         <button
           type="submit"
-          className="absolute right-4 top-2 size-6 text-neutral-400"
-          disabled={isLoading}
+          className="absolute right-4 top-2 size-6 text-neutral-400 cursor-pointer"
         >
           <Search />
         </button>
-        {state && (
-          <p className="text-red-600 text-sm font-semibold absolute left-4 top-12">
-            {state.message}
-          </p>
-        )}
       </form>
     </>
   );

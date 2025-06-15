@@ -33,3 +33,10 @@ type TCandidate = {
 export type TGenContentRes = {
   candidates: TCandidate[];
 };
+
+export type PromptResponse = {
+  message?: string;
+  data?: any; // Replace with your actual response type
+  error?: string;
+  isLoading?:boolean
+};
