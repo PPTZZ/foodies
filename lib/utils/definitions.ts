@@ -12,6 +12,8 @@ export type TButton = {
 export type TCardProps = {
   title: string;
   time: string;
+  userPrompt: string | null;
+  checked: boolean;
 };
 type TPart = {
   text: string;
@@ -40,5 +42,6 @@ export type PromptResponse = {
   time: string;
   instructions: string[];
   ingredients: string[];
+  checked: boolean;
   map?: () => any;
 };

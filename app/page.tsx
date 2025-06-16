@@ -18,11 +18,24 @@ function Home() {
   const disable = searchParams.get("d");
   const currentPage = Number(page ?? 1);
 
-  const { data, isLoading, isError, error } = useQuery<PromptResponse[]>({
+  const { data, isLoading } = useQuery<PromptResponse[]>({
     queryKey: ["recipes", userPrompt],
     queryFn: async () => {
+      if (typeof window !== "undefined") {
+        const cached = localStorage.getItem(`recipes-${userPrompt}`);
+        if (cached) return JSON.parse(cached);
+      }
       const result = await fetchData(userPrompt ?? "");
-      return Array.isArray(result) ? result : [result];
+      const formattedResult = Array.isArray(result) ? result : [result];
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem(
+          `recipes-${userPrompt}`,
+          JSON.stringify(formattedResult)
+        );
+      }
+
+      return formattedResult;
     },
     enabled: !!userPrompt,
     staleTime:
@@ -50,20 +63,30 @@ function Home() {
   return (
     <>
       <Input />
-      {isLoading ? <p>Loading...</p> : null}
-      <div className="flex flex-col gap-4 mt-16 w-full px-4 items-center">
-        {data && <h1>Suggested recipes</h1>}
-        {data &&
-          paginatedRecipes?.map((recipe) => (
-            <Link
+      {isLoading ? (
+        <div className="text-xl mt-6 font-semibold">
+          <p>Generating recipes this might take a few seconds...</p>
+          <p>Hang in there!</p>
+        </div>
+      ) : null}
+      {data && (
+        <div className="flex flex-col gap-4 mt-16 w-full px-4 items-center">
+          <h1>Suggested recipes</h1>
+
+          {paginatedRecipes?.map((recipe) => (
+            <Card
               key={recipe.id}
-              href={`${recipe.title.replaceAll(" ", "_")}?c=${userPrompt}`}
-            >
-              <Card title={recipe.title} time={recipe.time} />
-            </Link>
+              title={recipe.title}
+              userPrompt={userPrompt}
+              time={recipe.time}
+              checked={recipe.checked}
+            />
           ))}
-      </div>
-      <LoadMoreButton onClick={updatePage}>I don’t like these</LoadMoreButton>
+          <LoadMoreButton onClick={updatePage}>
+            I don’t like these
+          </LoadMoreButton>
+        </div>
+      )}
     </>
   );
 }

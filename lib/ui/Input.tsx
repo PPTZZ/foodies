@@ -26,6 +26,7 @@ function Input() {
           type="text"
           name="prompt"
           placeholder="What do you feel like eating?"
+          className="w-[100%] md:w-[25rem] h-10 rounded-full ring-2 ring-neutral-200 px-4 py-3 bg-white placeholder:text-neutral-300 focus:ring-neutral-400 focus:outline-0"
         />
         <button
           type="submit"
