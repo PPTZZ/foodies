@@ -5,13 +5,6 @@ import type { TGenContentRes } from "@/lib/utils/definitions";
 // Promise<string | null>
 // handles the request to the Gemini API to generate content based on a prompt
 async function gemini(prompt: string): Promise<unknown | null> {
-  if (!process.env.GEMINI_API_KEY) {
-    console.error(
-      "GEMINI_API_KEY is not set. Please set it in your .env.local file."
-    );
-    return null;
-  }
-
   const req: TGenContentReq = {
     contents: [
       {
@@ -30,7 +23,7 @@ async function gemini(prompt: string): Promise<unknown | null> {
   // fetching data from the Gemini API and returning the response or throwing an error if the request fails
   try {
     const res = await fetch(
-      `${process.env.API_ENDPOINT}/${process.env.GEMINI_MODEL}:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyCi4jqX2JTDNP-yCczEzS0OVZu0JlROweg`,
       {
         method: "POST",
         headers: {
