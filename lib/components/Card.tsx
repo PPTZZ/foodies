@@ -2,9 +2,9 @@ import { Heart } from "lucide-react";
 import type { TCardProps } from "@/lib/utils/definitions";
 import Image from "next/image";
 
-function Card({ title, time }: TCardProps) {
+function Card({ title, time}: TCardProps) {
   return (
-    <div className="w-96 h-[5.5rem] rounded-2xl bg-neutral-200 flex items-center shadow-card-shadow pr-4">
+    <div className="w-full sm:w-96 h-[5.5rem] rounded-2xl bg-neutral-200 flex items-center shadow-card-shadow pr-4">
       <Image
         src="/img-placeholder-sm.png"
         alt="image placeholder"

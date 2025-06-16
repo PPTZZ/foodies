@@ -35,8 +35,10 @@ export type TGenContentRes = {
 };
 
 export type PromptResponse = {
-  message?: string;
-  data?: any; // Replace with your actual response type
-  error?: string;
-  isLoading?:boolean
+  id: string;
+  title: string;
+  time: string;
+  instructions: string[];
+  ingredients: string[];
+  map?: () => any;
 };

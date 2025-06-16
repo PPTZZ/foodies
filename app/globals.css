@@ -10,7 +10,20 @@
   body {
     @apply bg-neutral-100 text-black;
   }
+
+  h1 {
+    @apply text-3xl font-bold;
+  }
+
+  h2 {
+    @apply text-2xl font-semibold;
+  }
+  
+  h3 {
+    @apply text-xl font-semibold;
+  }
+
   input {
-    @apply md:w-[25rem] h-10 rounded-full ring-2 ring-neutral-200 px-4 py-3 bg-white placeholder:text-neutral-300 focus:ring-neutral-400 focus:outline-0;
+    @apply w-[100%] md:w-[25rem] h-10 rounded-full ring-2 ring-neutral-200 px-4 py-3 bg-white placeholder:text-neutral-300 focus:ring-neutral-400 focus:outline-0;
   }
 }

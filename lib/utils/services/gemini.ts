@@ -17,7 +17,7 @@ async function gemini(prompt: string): Promise<unknown | null> {
       {
         parts: [
           {
-            text: `give me a list of 20 recipes, all must contain a "id", a "title", a "cooking time", and "detailed instructions" and should contain  ${prompt}`,
+            text: `give me a list of 20 recipes, all must contain a "checked" property with the value false, a "id", a "title", a "time", an "ingredients" lsit and  an "instructions" list and should contain  ${prompt}`,
           },
         ],
       },
