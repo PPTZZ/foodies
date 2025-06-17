@@ -1,6 +1,6 @@
 "use client";
 import { PromptResponse } from "@/lib/utils/definitions";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Heart } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -12,10 +12,29 @@ function Recipe() {
   const title = String(path.substring(1).replaceAll("_", " "));
   const category = searchParams.get("c");
   const queryClient = useQueryClient();
-  const data = queryClient.getQueryData(["recipes", category]);
 
-  const recipesArray = Array.isArray(data) ? (data as PromptResponse[]) : [];
+  const recipesArray =
+    queryClient.getQueryData<PromptResponse[]>(["recipes", category]) || [];
   const recipe = recipesArray.filter((recipe) => recipe.title === title);
+
+  const toggleItemMutation = useMutation({
+    mutationFn: async (titleToMatch: string) => {
+      if (!recipesArray.length) return [];
+      const updatedItems = recipesArray.map((item: PromptResponse) =>
+        item.title === titleToMatch ? { ...item, checked: !item.checked } : item
+      );
+
+      localStorage.setItem(`recipes-${category}`, JSON.stringify(updatedItems));
+      return updatedItems;
+    },
+    onSuccess: (updatedItems) => {
+      queryClient.setQueryData(["recipes", category], updatedItems);
+    },
+  });
+
+  function toggleChecked() {
+    toggleItemMutation.mutate(title);
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-7xl relative">
@@ -33,7 +52,12 @@ function Recipe() {
               <h2>{recipe[0]?.title}</h2>
               <p>{recipe[0]?.time}</p>
             </div>
-            <Heart className="stroke-primary cursor-pointer hover:fill-primary" />
+            <Heart
+              className={`stroke-primary cursor-pointer hover:fill-primary ${
+                recipe[0]?.checked ? "fill-primary" : "fill-transparent"
+              }`}
+              onClick={toggleChecked}
+            />
           </div>
         </div>
       </div>

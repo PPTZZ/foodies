@@ -13,7 +13,9 @@ function Favorites() {
     | Array<PromptResponse>
     | undefined;
 
-  const filteredData = data?.filter((recipe) => recipe.checked === true);
+  const filteredData = React.useMemo(() => {
+    return data?.filter((item) => item.checked === true) ?? [];
+  }, [data]);
 
   return (
     <>
