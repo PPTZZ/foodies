@@ -3,7 +3,7 @@ import Card from "@/lib/components/Card";
 import { PromptResponse } from "@/lib/utils/definitions";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 
 function Favorites() {
   const searchParams = useSearchParams();
@@ -12,6 +12,8 @@ function Favorites() {
   const data = queryClient.getQueryData(["recipes", category]) as
     | Array<PromptResponse>
     | undefined;
+
+  useEffect(()=>{},[])
 
   const filteredData = React.useMemo(() => {
     return data?.filter((item) => item.checked === true) ?? [];

@@ -13,7 +13,7 @@ function Home() {
   const searchParams = useSearchParams();
   const { push } = useRouter();
   const path = usePathname();
-  const [cursor, setCursor] = useState(0);
+  const cursor = [0, 5, 10, 15];
   const userPrompt = searchParams.get("q");
   const page = searchParams.get("p");
   const currentPage = Number(page ?? 1);
@@ -48,7 +48,6 @@ function Home() {
     const currentPage = Number(page ?? 0);
     if (currentPage < 4) {
       const params = new URLSearchParams(searchParams);
-      setCursor((prevState) => prevState + 5);
       const pageNumber = currentPage + 1;
       params.set("p", String(pageNumber));
       push(`${path}?${params.toString()}`, {
@@ -59,7 +58,10 @@ function Home() {
     }
   }
 
-  const paginatedRecipes = data?.slice(cursor, currentPage * 5);
+  const paginatedRecipes = data?.slice(
+    cursor[currentPage - 1],
+    currentPage * 5
+  );
 
   return (
     <>
